@@ -212,7 +212,7 @@ const RouterService = Service.extend({
      @public
    */
   isActive(/* routeName, ...models, options */) {
-    let { routeName, models, queryParams } = this._extractArguments(...arguments);
+    let { routeName, models, queryParams } = extractArguments(...arguments);
     let routerMicrolib = this._router._routerMicrolib;
     let state = routerMicrolib.state;
 
@@ -225,20 +225,20 @@ const RouterService = Service.extend({
     }
 
     return true;
-  },
-
-  _extractArguments(routeName, ...models) {
-    let possibleQueryParams = models[models.length - 1];
-    let queryParams = {};
-
-    if (possibleQueryParams && possibleQueryParams.hasOwnProperty('queryParams')) {
-      let options = models.pop();
-      queryParams = options.queryParams;
-    }
-
-    return { routeName, models, queryParams };
   }
 });
+
+function extractArguments(routeName, ...models) {
+  let possibleQueryParams = models[models.length - 1];
+  let queryParams = {};
+
+  if (possibleQueryParams && possibleQueryParams.hasOwnProperty('queryParams')) {
+    let options = models.pop();
+    queryParams = options.queryParams;
+  }
+
+  return { routeName, models, queryParams };
+}
 
 function resemblesURL(str) {
   return typeof str === 'string' && (str === '' || str[0] === '/');
